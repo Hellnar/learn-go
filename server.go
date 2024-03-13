@@ -32,4 +32,5 @@ func file(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprint(w, "Error: can't read file to show the content")
 	}
 	fmt.Fprintf(w, string(data))
+	
 }
