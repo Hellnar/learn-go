@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="w-[20%] flex flex-col items-start p-6 gap-2">
+        <div class="flex items-center gap-2">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/2560px-Go_Logo_Blue.svg.png" alt="Go" class="h-6">
+            <p class="font-bold">Todo app</p>
+        </div>
+
+        <div class="flex gap-2">
+            <p>Tasks:</p>
+            <p>0</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button id="add-task" class="bg-blue-500 p-2 text-white rounded">Add task</button>
+            <input id="input-task" type="text" class="border border-gray-300 p-2 rounded">
+        </div>
+
+        <div id="task-list" class="flex flex-col">
+            <p>Test task</p>
+        </div>
+    </div>
+
+    <script type="module">
+        await renderTasks()
+
+        document.getElementById("add-task").addEventListener("click", async () => {
+            const task = document.getElementById("input-task").value
+            const response = await fetch(`http://localhost:8090/add?task=${task}`, {
+                method: "POST"
+            })
+            console.log(response)
+        })
+
+        async function getTasks() {
+            const response = await fetch(`http://localhost:8090`)
+            const data = await response.json()
+            return data
+        }
+
+        async function renderTasks() {
+            const tasks = await getTasks()
+            for(const task of tasks) {
+                const element = document.createElement("p")
+                element.innerText = task
+                document.getElementById("task-list").appendChild(element)
+            }
+        }
+    </script>
+</body>
+</html>
